@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idade por Nome</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2> Descubra a Idade Média pelo Nome</h2>
+    <input id="nome" placeholder="Digite um nome" />
+    <button onclick="buscarIdade()">Buscar</button>
+    <p id="resultado"></p>
+
+    <script>
+        async function buscarIdade() {
+            const nome = document.getElementById("nome").value.trim();
+            const resultado = document.getElementById("resultado");
+
+            if (!nome) {
+                resultado.textContent = "Por favor, digite um nome.";
+                return;
+            }
+
+            try {
+                const resposta = await fetch(`https://api.agify.io?name=${nome}`);
+                if (!resposta.ok) throw new Error("Erro na resposta da API.");
+                
+                const dados = await resposta.json();
+                resultado.textContent = `A idade média para o nome "${nome}" é ${dados.age} anos.`;
+            } catch (erro) {
+                resultado.textContent = `Erro ao buscar dados: ${erro.message}`;
+                console.error("Erro:", erro);
+            }
+        }
+    </script>
+</body>
+</html>
